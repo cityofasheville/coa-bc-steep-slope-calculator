@@ -1,0 +1,42 @@
+<div class="col-md-8 col-md-offset-2">
+  <ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/api">api</a></li>
+    <li class="active">slope</li>
+  </ol>
+  <h2>slope</h2>
+  <p>
+    <pre><strong>GET:</strong> /api/slope/:pin</pre>
+    <div class="well col-xs-12">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Value</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>pin</td>
+            <td><input name = "pin" type="text" class="form-control" placeholder="pin or pins"></td>
+            <td>PIN, or comma-seperated list of PINs</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="col-xs-12">
+        <button class="btn btn-primary pull-right" type="button">Test</button>
+      </div>
+
+    </div>
+
+    <hr>
+    <h4>Sample 200 Response:</h4>
+    <pre>
+      {
+        "maxElevation": 100,
+        "percentSlope": 50
+      }
+    </pre>
+  </p>
+</div>
