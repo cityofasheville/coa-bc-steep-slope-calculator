@@ -14,8 +14,8 @@ router.get('/slope', function(req, res, next) {
 
 router.get('/slope/:pin', function(req, res, next) {
   res.json({
-    "maxElevation": 100,
-    "percentSlope": 50
+    "maxElevation": "2160.00",
+    "percentSlope": "20.32"
   })
 });
 
