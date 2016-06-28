@@ -98,7 +98,7 @@ router.get('/slope', function(req, res, next) {
       }
     });
   });
-  res.render('slope');
+
 });
 
 router.get('/slope/:pin', function(req, res, next) {
