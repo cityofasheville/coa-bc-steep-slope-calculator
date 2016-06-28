@@ -92,7 +92,7 @@ router.get('/slope', function(req, res, next) {
     client.query('SELECT * from bc_property limit(10)', function(err, result) {
       done();
       if (err){
-        console.error(err); response.send("Error " + err);
+        res.render('slope', "Well that didn't work!");
       }else{
         res.render('slope', {result: JSON.stringify(result)});
       }
