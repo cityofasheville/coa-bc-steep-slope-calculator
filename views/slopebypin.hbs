@@ -2,11 +2,11 @@
   <ol class="breadcrumb">
     <li><a href="/">Home</a></li>
     <li><a href="/api">api</a></li>
-    <li class="active">slope</li>
+    <li class="active">slopebypin</li>
   </ol>
-  <h2>slope</h2>
+  <h2>slopebypin</h2>
   <p>
-    <pre><strong>GET:</strong> /api/slope/:pin</pre>
+    <pre><strong>GET:</strong> /api/slopebypin/:pin</pre>
     <div class="well col-xs-12">
       <table class="table table-striped">
         <thead>
@@ -34,8 +34,11 @@
     <h4>Sample 200 Response:</h4>
     <pre>
       {
-        "maxElevation": 100,
-        "percentSlope": 50
+        "id":19615,
+        "jurisdiction":"CITY OF ASHEVILLE",
+        "maxElevation":"1111.00",
+        "acres":"11.1",
+        "percentSlope":"11.11"
       }
       {{result}}
     </pre>
