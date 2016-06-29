@@ -8,6 +8,7 @@
   <p>
     <pre><strong>GET:</strong> /api/slopebypin/:pin</pre>
     <div class="well col-xs-12">
+      <form>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -19,15 +20,15 @@
         <tbody>
           <tr>
             <td>pin</td>
-            <td><input id = "testSlopePin" type="text" class="form-control" placeholder="pin or pins"></td>
+            <td><form id = "testSlopePinForm"><input id = "testSlopePin" type="text" class="form-control" placeholder="pin or pins"></form></td>
             <td>PIN, or comma-seperated list of PINs</td>
           </tr>
         </tbody>
       </table>
       <div class="col-xs-12">
-        <a id = "testSlopeLink" target = "_blank" href="/api/slopebypin" class="btn btn-primary pull-right">Test</a>
+        <button id = "testSlopeByPinApi" class="btn btn-primary pull-right">Test</button>
       </div>
-
+      </form>
     </div>
 
     <hr>
@@ -40,7 +41,6 @@
         "acres":"11.1",
         "percentSlope":"11.11"
       }
-      {{result}}
     </pre>
   </p>
 </div>

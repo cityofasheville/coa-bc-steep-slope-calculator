@@ -6,7 +6,12 @@ function addEventHandler(elem, eventType, handler) {
 }
 
 addEventHandler(document, 'DOMContentLoaded', function() {
-    addEventHandler(document.getElementById('testSlopePin'), 'change', function() {
-        document.getElementById('testSlopeLink').href = "/api/slope/" + this.value;
+
+    addEventHandler(document.getElementById('testSlopeByPinApi'), 'click', function() {
+      console.log(document.getElementById('testSlopePin').value);
+        window.open("/api/slopebypin/" + document.getElementById('testSlopePin').value, "_blank");
     });
+    // addEventHandler(document.getElementById('testSlopePinForm'), 'submit', function() {
+    //
+    // });
 });
