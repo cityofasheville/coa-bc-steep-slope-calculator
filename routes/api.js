@@ -46,8 +46,7 @@ router.get('/slopebypin', function(req, res, next) {
 
 router.get('/slopebypin/:pin', function(req, res, next) {
 
-  var pinNoDashes = _.replace(req.params.pin, new RegExp("-","g"), "")
-  var pin = _.replace(req.params.pin, new RegExp(",","g"), ", ");
+  var pin = _.replace(req.params.pin, new RegExp("-","g"), "")
   //getSlopeByPin(req.params.pin);
   var client = new pg.Client(process.env.DATABASE_URL);
   client.connect(function (err) {
