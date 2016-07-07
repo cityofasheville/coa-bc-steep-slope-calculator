@@ -11,7 +11,7 @@ var router = express.Router();
 function getSqlStatementToCheckIfGeomIsAlreadyCalcuatedForPins(pins){
   var sqlStatementInner = "(SELECT st_union(p.shape) as \"GEOM\" " +
                    "FROM \"bc_property\" p " +
-                   "WHERE  p.\"pinnum\" in ('" + pins + "'))";
+                   "WHERE  p.\"pinnum\" in ($1::text))";
   var sqlStatement = "SELECT slopetool_checkGeomg(" + sqlStatementInner + ")as \"ID\" ";
   return sqlStatement
 }
@@ -19,12 +19,12 @@ function getSqlStatementToCheckIfGeomIsAlreadyCalcuatedForPins(pins){
 function getSqlStatementToCalculateSlopeGeomForPins(pin){
   sqlStatment = "SELECT slopetool_getSlopeFromGeom(st_union(p.shape)) as \"ID\" " +
                 "FROM \"bc_property\" p " +
-                "WHERE  p.\"pinnum\" in ('" + pin + "')";
+                "WHERE  p.\"pinnum\" in ($1::text)";
   return sqlStatment;
 }
 
 function getSqlStatementThatSelectSlopeAttributesById(slopeId){
-  var sqlStatement = "SELECT "+slopeId+ " as \"id\" ,\"jurisdiction\" as \"jurisdiction\", " +
+  var sqlStatement = "SELECT " + slopeId + " as \"id\" ,\"jurisdiction\" as \"jurisdiction\", " +
         "round(\"maxcontour\",2) as \"maxElevation\",  " +
         "round(\"acres\",2) as \"acres\", " +
         "round(\"avgslope\",2) as \"percentSlope\" " +
@@ -45,16 +45,19 @@ router.get('/slopebypin', function(req, res, next) {
 });
 
 router.get('/slopebypin/:pin', function(req, res, next) {
+
+  var pinNoDashes = _.replace(req.params.pin, new RegExp("-","g"), "")
+  var pin = _.replace(req.params.pin, new RegExp(",","g"), ", ");
   //getSlopeByPin(req.params.pin);
   var client = new pg.Client(process.env.DATABASE_URL);
   client.connect(function (err) {
     if (err) throw err;
 
-    client.query(getSqlStatementToCheckIfGeomIsAlreadyCalcuatedForPins(req.params.pin), function (err, result) {
+    client.query(getSqlStatementToCheckIfGeomIsAlreadyCalcuatedForPins(req.params.pin), [pin], function (err, result) {
       if (err) throw err;
       var slopeId = result.rows[0].ID;
       if(slopeId == 0){
-        client.query(getSqlStatementToCalculateSlopeGeomForPins(req.params.pin), function (err, result) {
+        client.query(getSqlStatementToCalculateSlopeGeomForPins(req.params.pin), [pin], function (err, result) {
           if (err) throw err;
           var slopeId = result.rows[0].ID;
           client.query(getSqlStatementThatSelectSlopeAttributesById(slopeId), function (err, result) {
