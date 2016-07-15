@@ -8,6 +8,14 @@ function addEventHandler(elem, eventType, handler) {
     elem.attachEvent ('on' + eventType, handler);
 }
 
+function showErrorMessage(){
+  document.getElementById('loading').classList.remove("show");
+  document.getElementById('loading').classList.add("hidden");
+  document.getElementById('resultsDiv').classList.remove("hidden");
+  document.getElementById('resultsDiv').classList.add("show");
+  document.getElementById("resultsDiv").innerHTML = "There was an error processing your request.";
+}
+
 addEventHandler(document, 'DOMContentLoaded', function() {
 
     addEventHandler(document.getElementById('testSlopeByPinApi'), 'click', function() {
@@ -16,21 +24,24 @@ addEventHandler(document, 'DOMContentLoaded', function() {
     addEventHandler(document.getElementById('calcButton'), 'click', function() {
       document.getElementById('loading').classList.remove("hidden");
       document.getElementById('loading').classList.add("show");
-      axios.get('/api/slopebypin/' + document.getElementById("pinInput").value)
-        .then(function (response) {
+      $.get('/api/slopebypin/' + document.getElementById("pinInput").value, function(data, status){
+        if(status === 'success'){
+          if(data.jurisdiction === null || data.acres === null || data.maxElevation === null || data.jurisdiction === percentSlope){
+            showErrorMessage();
+            return;
+          }
           document.getElementById('loading').classList.remove("show");
           document.getElementById('loading').classList.add("hidden");
           document.getElementById('resultsDiv').classList.remove("hidden");
           document.getElementById('resultsDiv').classList.add("show");
-          document.getElementById("jurisdiction").innerHTML = response.data.jurisdiction;
-          document.getElementById("acres").innerHTML = response.data.acres;
-          document.getElementById("maxElevation").innerHTML = response.data.maxElevation;
-          document.getElementById("percentSlope").innerHTML = response.data.percentSlope;
-          //document.getElementById('resultsDiv')
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+          document.getElementById("jurisdiction").innerHTML = data.jurisdiction;
+          document.getElementById("acres").innerHTML = data.acres;
+          document.getElementById("maxElevation").innerHTML = data.maxElevation;
+          document.getElementById("percentSlope").innerHTML = data.percentSlope;
+        }else{
+          showErrorMessage();
+        }
+      }, 'json');
     });
 
 });
