@@ -57,17 +57,21 @@ router.get('/slopebypin/:pin', function(req, res, next) {
 
   //getSlopeByPin(req.params.pin);
 
-  var client = new pg.Client(process.env.DATABASE_URL);
+  var client = new pg.Client('postgres://postgres:rGxv9ZbuGfD9FkM1J589@steepslope.cvxz56fxyemy.us-east-1.rds.amazonaws.com:5432/steepslope')
+  //var client = new pg.Client('postgres://ierrenheoqtoqz:jChS6iQEMezd-0kFryXEJvRpyx@ec2-54-243-42-108.compute-1.amazonaws.com:5432/dejlnccns8ouhs?ssl=true')//new pg.Client(process.env.DATABASE_URL);
   client.connect(function (err) {
     if (err) throw err;
 
     client.query(getSqlStatementToCheckIfGeomIsAlreadyCalcuatedForPins(req.params.pin), [pin], function (err, result) {
       if (err) throw err;
       var slopeId = result.rows[0].ID;
-      if(slopeId == 0){
+      console.log(slopeId);
+      if(!slopeId == 0){
         client.query(getSqlStatementToCalculateSlopeGeomForPins(req.params.pin), [pinArray[0], pinArray[1], pinArray[2], pinArray[3], pinArray[4]], function (err, result) {
-          if (err) throw err;
+          if (err) console.log(err);//throw err;
+
           var slopeId = result.rows[0].ID;
+          console.log(slopeId);
           client.query(getSqlStatementThatSelectSlopeAttributesById(slopeId), function (err, result) {
             if (err) throw err;
             res.json(result.rows[0]);
