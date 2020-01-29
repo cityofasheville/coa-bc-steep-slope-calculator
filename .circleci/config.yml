@@ -16,7 +16,7 @@ jobs:
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           region: AWS_DEFAULT_REGION
-          repo: 'coa-steepslope'
+          repo: 'steepslope'
           tag: "${CIRCLE_SHA1}"
           extra-build-args: '--build-arg CONNECTSTRING=${CONNECTSTRING}/
                   --build-arg port=3000'
@@ -39,7 +39,7 @@ jobs:
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           region: AWS_DEFAULT_REGION
-          repo: 'coa-steepslope'
+          repo: 'steepslope'
           tag: "${CIRCLE_SHA1}"
           extra-build-args: '--build-arg CONNECTSTRING=${CONNECTSTRING}/
                    --build-arg port=3000'
