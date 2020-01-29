@@ -1,0 +1,70 @@
+version: 2.1
+orbs:
+  aws-ecr: circleci/aws-ecr@6.6.0
+  aws-ecs: circleci/aws-ecs@1.0.4
+
+defaults: &defaults
+  docker:
+    - image: circleci/python:3.7.1
+jobs:
+  deploy-production:
+    <<: *defaults
+    steps:
+      - setup_remote_docker
+      - aws-ecr/build-and-push-image:
+          account-url: ECR_ACCOUNT_URL
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          region: AWS_DEFAULT_REGION
+          repo: 'coa-steepslope'
+          tag: "${CIRCLE_SHA1}"
+          extra-build-args: '--build-arg CONNECTSTRING=${CONNECTSTRING}/
+                  --build-arg port=3000'
+      - aws-ecs/update-service:
+          family: 'steepslope'
+          cluster-name: 'steepslope_ecs_cluster'
+          service-name: 'steepslope'
+          container-image-name-updates: 'container=steepslope,tag=${CIRCLE_SHA1}'
+          force-new-deployment: true
+          verify-revision-is-deployed: true
+          max-poll-attempts: 30
+          poll-interval: 60
+          fail-on-verification-timeout: false
+  deploy-development:
+    <<: *defaults
+    steps:
+      - setup_remote_docker
+      - aws-ecr/build-and-push-image:
+          account-url: ECR_ACCOUNT_URL
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          region: AWS_DEFAULT_REGION
+          repo: 'coa-steepslope'
+          tag: "${CIRCLE_SHA1}"
+          extra-build-args: '--build-arg CONNECTSTRING=${CONNECTSTRING}/
+                   --build-arg port=3000'
+      - aws-ecs/update-service:
+          family: 'steepslope'
+          cluster-name: 'steepslope_ecs_cluster'
+          service-name: 'steepslope'
+          container-image-name-updates: 'container=steepslope,tag=${CIRCLE_SHA1}'
+          force-new-deployment: true
+          verify-revision-is-deployed: true
+          max-poll-attempts: 30
+          poll-interval: 60
+          fail-on-verification-timeout: false
+workflows:
+  build-deploy:
+    jobs:
+      - deploy-development:
+          filters:
+            branches:
+              only: development
+          context: steepslope-development
+
+      - deploy-production:
+          filters:
+            branches:
+              only:  master
+          context: steepslope-production
+          type: approval
