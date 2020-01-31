@@ -71,4 +71,5 @@ workflows:
             branches:
               only:  master
           context: steepslope-production
-          requires: deploy-approval
+          requires:
+            - deploy-approval
