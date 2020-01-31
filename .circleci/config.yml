@@ -61,10 +61,14 @@ workflows:
             branches:
               only: development
           context: steepslope-development
-
+      - deploy-approval:
+          type: approval
+          filters:
+            branches:
+              only: master
       - deploy-production:
           filters:
             branches:
               only:  master
           context: steepslope-production
-          type: approval
+          requires: deploy-approval
