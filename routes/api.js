@@ -2,6 +2,7 @@ var _ = require('lodash');
 var express = require('express');
 var pg = require('pg');
 var router = express.Router();
+require('dotenv').load();
 
 //pg.defaults.ssl = true;
 
