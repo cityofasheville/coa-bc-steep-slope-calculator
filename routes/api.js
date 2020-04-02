@@ -56,7 +56,7 @@ router.get('/slopebypin/:pin', function(req, res, next) {
   }
 
 
-  //getSlopeByPin(req.params.pin);
+  getSlopeByPin(req.params.pin);
 
   var client = new pg.Client(process.env.CONNECTSTRING);
   client.connect(function (err) {
