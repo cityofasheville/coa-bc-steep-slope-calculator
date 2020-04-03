@@ -74,8 +74,8 @@ router.get('/slopebypin/:pin', function(req, res, next) {
           console.log(slopeId);
           client.query(getSqlStatementThatSelectSlopeAttributesById(slopeId), function (err, result) {
             if (err) throw err;
-            //res.json(result.rows[0]);
-            res.send('{"id":' + result.rows[0].id + ',"jurisdiction":' + result.rows[0].jurisdiction + ',"maxElevation:" ' + parseFloat(result.rows[0].maxElevation) + ',"acres": ' + result.rows[0].acres + ',"percentSlope":' +  parseFloat(result.rows[0].percentSlope) + '}');
+            res.json(result.rows[0]);
+            //res.send('{"id":' + result.rows[0].id + ',"jurisdiction":' + result.rows[0].jurisdiction + ',"maxElevation:" ' + parseFloat(result.rows[0].maxElevation) + ',"acres": ' + result.rows[0].acres + ',"percentSlope":' +  parseFloat(result.rows[0].percentSlope) + '}');
             //Close the connection
             //Close the connection
             client.end(function (err) {
