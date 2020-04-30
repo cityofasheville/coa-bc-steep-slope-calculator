@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "@cloudnative/health-connect": "^2.1.0",
     "body-parser": "^1.19.0",
     "cookie-parser": "~1.4.3",
     "debug": "^4.1.1",

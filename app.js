@@ -4,7 +4,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+const health = require('@cloudnative/health-connect')
+const pg = require('pg')
 
+let healthCheck = new health.HealthChecker();
 var routes = require('./routes/index');
 var api = require('./routes/api');
 var findslopeforparcel = require('./routes/findslopeforparcel');
@@ -22,6 +25,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+const livePromise = () => new Promise(function (resolve, _reject) {
+  setTimeout(function () {
+    pg.connect
+    resolve();
+  }, 10);
+});
+let liveCheck = new health.LivenessCheck("liveCheck", livePromise);
+healthcheck.registerLivenessCheck(liveCheck);
+
+app.use('/health', health.HealthEndpoint(healthCheck))
+app.use('/live', health.HealthEndpoint(healthCheck))
 
 app.use('/', routes);
 app.use('/api', api);
