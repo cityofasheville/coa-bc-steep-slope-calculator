@@ -60,7 +60,7 @@ router.get('/slopebypin/:pin', function(req, res, next) {
 
   //getSlopeByPin(req.params.pin);
 
-  var client = new pg.Client('postgres://jiekcvgdsobrwt:0a4f7ba7c122474955cf244b379532f2a1864a992d8cf24b7db9007991a7e3b6@ec2-23-20-129-146.compute-1.amazonaws.com:5432/de5t3s7a4oeo93');
+  var client = new pg.Client(process.env.CONNECTSTRING);
   client.connect(function (err) {
     if (err) throw err;
 

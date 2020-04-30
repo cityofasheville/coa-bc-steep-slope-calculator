@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const health = require('@cloudnative/health-connect')
 const pg = require('pg')
+require('dotenv');
 
 let healthCheck = new health.HealthChecker();
 var routes = require('./routes/index');
@@ -22,18 +23,30 @@ app.set('view engine', 'hbs');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const livePromise = () => new Promise(function (resolve, _reject) {
-  setTimeout(function () {
-    pg.connect
-    resolve();
-  }, 10);
+    var sql = "SELECT version();";
+    var pool = new pg.Pool({
+        host: process.env.HOST,
+        user: process.env.DBUSER,
+        password: process.env.DBPASS,
+        database: process.env.DBNAME,
+        port: 5432
+    })
+    pool.connect(function (err, client, done) {
+        client.query(sql)
+        done()
+    })
+    pool.end(function (err) {
+        if (err) throw err;
+        resolve();
+    });
 });
 let liveCheck = new health.LivenessCheck("liveCheck", livePromise);
-healthcheck.registerLivenessCheck(liveCheck);
+healthCheck.registerLivenessCheck(liveCheck);
 
 app.use('/health', health.HealthEndpoint(healthCheck))
 app.use('/live', health.HealthEndpoint(healthCheck))
@@ -43,10 +56,10 @@ app.use('/api', api);
 app.use('/find-slope-for-parcel', findslopeforparcel);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+app.use(function (req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
 // error handlers
@@ -54,23 +67,23 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
+    app.use(function (err, req, res, next) {
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: err
+        });
     });
-  });
 }
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
+app.use(function (err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
 });
 
 module.exports = app;
