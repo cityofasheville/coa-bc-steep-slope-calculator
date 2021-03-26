@@ -8,12 +8,14 @@ function addEventHandler(elem, eventType, handler) {
     elem.attachEvent ('on' + eventType, handler);
 }
 
-function showErrorMessage(){
+function showErrorMessage(msg){
   document.getElementById('loading').classList.remove("show");
   document.getElementById('loading').classList.add("hidden");
-  document.getElementById('resultsDiv').classList.remove("hidden");
-  document.getElementById('resultsDiv').classList.add("show");
-  document.getElementById("resultsDiv").innerHTML = "There was an error processing your request.";
+  document.getElementById('resultsDiv').classList.remove("show");
+  document.getElementById('resultsDiv').classList.add("hidden");
+  document.getElementById('errormsgs').classList.remove("hidden");
+  document.getElementById('errormsgs').classList.add("show");
+  document.getElementById("errormsgs").innerHTML = msg;
 }
 
 addEventHandler(document, 'DOMContentLoaded', function() {
@@ -26,20 +28,21 @@ addEventHandler(document, 'DOMContentLoaded', function() {
       document.getElementById('loading').classList.add("show");
       $.get('/api/slopebypin/' + document.getElementById("pinInput").value, function(data, status){
         if(status === 'success'){
-          if(data.jurisdiction === null || data.acres === null || data.maxElevation === null || data.jurisdiction === percentSlope){
-            showErrorMessage();
+          if(data.id == 0){  
+            showErrorMessage("PIN not found");
             return;
           }
           document.getElementById('loading').classList.remove("show");
           document.getElementById('loading').classList.add("hidden");
           document.getElementById('resultsDiv').classList.remove("hidden");
           document.getElementById('resultsDiv').classList.add("show");
+          document.getElementById('errormsgs').classList.add("hidden");
           document.getElementById("jurisdiction").innerHTML = data.jurisdiction;
           document.getElementById("acres").innerHTML = data.acres;
           document.getElementById("maxElevation").innerHTML = data.maxElevation;
           document.getElementById("percentSlope").innerHTML = data.percentSlope;
         }else{
-          showErrorMessage();
+          showErrorMessage("There was an error processing your request.");
         }
       }, 'json');
     });
