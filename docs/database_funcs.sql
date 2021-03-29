@@ -115,7 +115,44 @@ $function$
 ;
  
  
- 
+ ----
+  ----------------------------------
+drop FUNCTION public.testfun();
+
+CREATE OR REPLACE FUNCTION public.testfun()
+returns int
+language plpgsql
+as $$
+declare
+	pins varchar[] := array['962802744900000'];
+begin
+	--return query
+	return(select objectid from bc_property where pinnum = any(pins));
+end $$; 
+  ----------------------------------
+CREATE OR REPLACE FUNCTION public.testfun()
+	 RETURNS table (
+	 	res int
+	 )
+language plpgsql
+as $$
+declare
+	pins varchar[] := array['962802744900000'];
+begin
+	return query(select objectid from bc_property where pinnum = any(pins));
+end $$; 
+  ----------------------------------
+CREATE OR REPLACE FUNCTION public.testfun(pins varchar[])
+	 RETURNS table (
+	 	res int
+	 )
+language plpgsql
+as $$
+begin
+	return query(select objectid from bc_property where pinnum = any(pins));
+end $$;  
+   ----------------------------------
+ select public.testfun(array['962802744900000']);
  
  
  
