@@ -29,7 +29,7 @@ addEventHandler(document, 'DOMContentLoaded', function() {
       $.get('/api/slopebypin/' + document.getElementById("pinInput").value, function(data, status){
         if(status === 'success'){
           if(data.id == 0){  
-            showErrorMessage("PIN not found");
+            showErrorMessage("PIN not found. Verify that it is a valid 10 or 15 digit PIN number in Buncombe County.");
             return;
           }
           document.getElementById('loading').classList.remove("show");

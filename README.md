@@ -1,10 +1,10 @@
 ### A NodeJS Express App that exposes a REST API for Accela and web tool at http://www.mapwnc.org
 
-This is currently hosted on Heroku.
+This is currently hosted on an EC2 instance.
 
-Buncombe County Property and City Jurisdiction GIS tables are copied nightly via FME to a Postgres database on Heroku.
+Buncombe County Property and City Jurisdiction GIS tables are copied nightly using Bedrock to a Postgres database.
 
-Elevation contours generated from Lidar data for Buncombe County are also stored on the Postgres database on Heroku.
+Elevation contours generated from Lidar data for Buncombe County are also stored on the Postgres database.
 
 The application calculates the "natural average slope" for a parcel or parcels of land (see the [Section 7-12-4 of the City of Asheville's Unified Development Ordinance](https://www.municode.com/library/nc/asheville/codes/code_of_ordinances?nodeId=PTIICOOR_CH7DE_ARTXIIENPRST_S7-12-4STSLRIDE] ) )
 
