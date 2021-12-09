@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 
 var routes = require('./routes/index');
 var api = require('./routes/api');
+var cors = require('cors');
 var findslopeforparcel = require('./routes/findslopeforparcel');
 
 var app = express();
@@ -13,6 +14,19 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+
+var allowList = ['https://simplicity.ashevillenc.gov/', 'http://simplicity.ashevillenc.gov/', 'https://localhost:3000', 'http://localhost:3000'];
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (allowList.indexOf(origin) !== -1 || !origin) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+};
+
+app.use(cors(corsOptions));
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
