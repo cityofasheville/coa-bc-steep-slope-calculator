@@ -16,10 +16,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
 var allowList = [
-  'https://simplicity.ashevillenc.gov/', 
-  'http://simplicity.ashevillenc.gov/', 
-  'https://dev-simplicity.ashevillenc.gov/', 
-  'http://dev-simplicity.ashevillenc.gov/', 
+  'https://simplicity.ashevillenc.gov', 
+  'http://simplicity.ashevillenc.gov', 
+  'https://dev-simplicity.ashevillenc.gov', 
+  'http://dev-simplicity.ashevillenc.gov', 
   'https://localhost:3000', 
   'http://localhost:3000'
 ];
