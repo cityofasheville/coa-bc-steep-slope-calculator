@@ -21,7 +21,8 @@ var allowList = [
   'https://dev-simplicity.ashevillenc.gov', 
   'http://dev-simplicity.ashevillenc.gov', 
   'https://localhost:3000', 
-  'http://localhost:3000'
+  'http://localhost:3000',
+  'https://climatej.d1thp43hcib1lz.amplifyapp.com'
 ];
 var corsOptions = {
   origin: function (origin, callback) {
