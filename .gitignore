@@ -43,3 +43,5 @@ jspm_packages
 
 # environment variables
 .env
+
+sam-template.packaged.yaml

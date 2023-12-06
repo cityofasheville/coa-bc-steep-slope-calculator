@@ -44,6 +44,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(req,res,next) {
+  res.locals.client = app.get('client');
+  next();
+});
+
 app.use('/', routes);
 app.use('/api', api);
 app.use('/find-slope-for-parcel', findslopeforparcel);

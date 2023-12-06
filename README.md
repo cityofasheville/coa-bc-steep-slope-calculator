@@ -6,7 +6,7 @@ Buncombe County Property and City Jurisdiction GIS tables are copied nightly usi
 
 Elevation contours generated from Lidar data for Buncombe County are also stored on the Postgres database.
 
-The application calculates the "natural average slope" for a parcel or parcels of land (see the [Section 7-12-4 of the City of Asheville's Unified Development Ordinance](https://www.municode.com/library/nc/asheville/codes/code_of_ordinances?nodeId=PTIICOOR_CH7DE_ARTXIIENPRST_S7-12-4STSLRIDE] ) )
+The application calculates the "natural average slope" for a parcel or parcels of land (see the [Section 7-12-4 of the City of Asheville's Unified Development Ordinance](https://codelibrary.amlegal.com/codes/ashevillenc/latest/asheville_nc/0-0-0-8028) )
 
 The slope calculation is costly and cannot be pre-calculated for the entire county (I think it takes like 24hrs to run once).
 So a sloperesults table is maintained on the Postgres database which contains the calculated slope, the parcel (or parcels) geometry, and some attribute data.
