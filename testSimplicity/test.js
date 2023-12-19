@@ -1,4 +1,4 @@
-const { request, gql } = require('graphql-request')
+import { request, gql } from 'graphql-request'
 
 const query = gql`
 query frontpageQuery($searchString: String!, $searchContexts: [String]) {

@@ -3,13 +3,7 @@
   "version": "1.0.0",
   "description": "A calculator for determining the slope of a property in the City of Asheville, NC",
   "main": "lambda.js",
-  "config": {
-    "s3BucketName": "serverless-ex-test",
-    "region": "us-east-1",
-    "cloudFormationStackName": "SteepSlopeLambda",
-    "functionName": "",
-    "domain": ""
-  },
+  "type": "module",
   "dependencies": {
     "@vendia/serverless-express": "^4.10.4",
     "cookie-parser": "^1.4.5",
@@ -19,24 +13,17 @@
     "express": "^4.17.1",
     "hbs": "^4.1.1",
     "https": "^1.0.0",
-    "is-port-reachable": "^4.0.0",
-    "lodash": "^4.17.21",
     "morgan": "^1.10.0",
-    "pg": "^8.11.3",
-    "serve-favicon": "^2.5.0"
+    "pg": "^8.11.3"
   },
   "scripts": {
-    "start": "node app.local.js",
-    "local": "node scripts/local",
-    "invoke-lambda": "cross-var aws lambda invoke --function-name $npm_package_config_functionName --region $npm_package_config_region --payload file://api-gateway-event.json lambda-invoke-response.json && cat lambda-invoke-response.json",
-    "create-bucket": "cross-var aws s3 mb s3://$npm_package_config_s3BucketName --region $npm_package_config_region",
-    "delete-bucket": "cross-var aws s3 rb s3://$npm_package_config_s3BucketName --region $npm_package_config_region",
-    "package": "cross-var aws cloudformation package --template ./sam-template.yaml --s3-bucket $npm_package_config_s3BucketName --output-template sam-template.packaged.yaml --region $npm_package_config_region",
-    "deploy": "cross-var aws cloudformation deploy --template-file sam-template.packaged.yaml --stack-name $npm_package_config_cloudFormationStackName --capabilities CAPABILITY_IAM --region $npm_package_config_region --parameter-overrides DomainName=$npm_package_config_domain",
-    "package-deploy": "npm run build && npm run package && npm run deploy",
-    "delete-stack": "cross-var aws cloudformation delete-stack --stack-name $npm_package_config_cloudFormationStackName --region $npm_package_config_region",
-    "setup": "npm install && (cross-var aws s3api get-bucket-location --bucket $npm_package_config_s3BucketName --region $npm_package_config_region || npm run create-bucket) && npm run package-deploy",
-    "build": "echo 'no build step'"
+    "start": "node src/app.local.js",
+    "clean": "rm -rf deploy/nodejs && rm -rf deploy/function && rm -rf deploy/.terraform && rm -rf deploy/.terraform.lock.hcl && rm -rf deploy/*.zip",
+    "build-layer": "cd deploy && mkdir -p nodejs && cp -R ../package*.json nodejs/ && cd nodejs && npm install --omit=dev",
+    "build-function": "cd deploy && mkdir -p function && cp -R ../src/* ../package*.json function/",
+    "deploy-terraform": "cd deploy && terraform init && terraform apply -auto-approve -var-file=ca.tfvars",
+    "deploy": "cd deploy && npm run build-layer && npm run build-function && npm run deploy-terraform",
+    "destroy": "cd deploy && mkdir -p nodejs && mkdir -p function && terraform init && terraform destroy -auto-approve -var-file=ca.tfvars"
   },
   "repository": {
     "type": "git",
@@ -48,8 +35,5 @@
   "bugs": {
     "url": "https://github.com/cityofasheville/coa-bc-steep-slope-calculator/issues"
   },
-  "homepage": "https://github.com/cityofasheville/coa-bc-steep-slope-calculator#readme",
-  "devDependencies": {
-    "cross-var": "^1.1.0"
-  }
+  "homepage": "https://github.com/cityofasheville/coa-bc-steep-slope-calculator#readme"
 }

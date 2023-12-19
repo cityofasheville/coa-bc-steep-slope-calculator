@@ -1,7 +1,5 @@
 ### A NodeJS Express App that exposes a REST API for Accela and web tool at http://www.mapwnc.org
 
-This is currently hosted on an EC2 instance.
-
 Buncombe County Property and City Jurisdiction GIS tables are copied nightly using Bedrock to a Postgres database.
 
 Elevation contours generated from Lidar data for Buncombe County are also stored on the Postgres database.
@@ -13,8 +11,14 @@ So a sloperesults table is maintained on the Postgres database which contains th
 At runtime, the application checks if a matching geometry exist in the sloperesults table for the input parcel or parcels geometry (this is fast with PostGIS); if a matching geometry exist then the existing calculated slope and attribute data is returned, if not, the slope is calculated and returned from the API, and a new record is added to the sloperesults table.
 
 
-To run local test:
-    
-    node bin/www
+Runs as a Lambda function that wraps an Express App using serverless-express.
+
+## Commands
+- npm start         Run Express server locally
+- npm run runsam    Run 'sam local' for one event in test/sam_event.json
+- npm run deploy    Deploy
+- npm run clean     Remove local temp files
+- npm run destroy   Delete all objects from AWS
+
 
     

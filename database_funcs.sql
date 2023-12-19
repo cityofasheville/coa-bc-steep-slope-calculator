@@ -49,3 +49,29 @@ begin
 END
 $function$
 ;
+---------------
+CREATE OR REPLACE FUNCTION public.slopetool_getjurisdictiong(geom geometry)
+ RETURNS text
+ LANGUAGE plpgsql
+AS $function$
+
+DECLARE theJuris text;
+
+BEGIN
+
+SELECT b.description  as Jurisdiction
+FROM "bc_incorporated_areas" b
+WHERE (st_relate( $1,b.shape,'T*T******')  or st_relate( $1,b.shape,'T*F**F***') )
+  UNION
+SELECT b.cityname as Jurisdiction into theJuris
+FROM "coa_active_jurisdictions" b
+WHERE (st_relate( $1,b.shape,'T*T******')  or st_relate( $1,b.shape,'T*F**F***') )
+Group by b.cityname;
+
+--IF theJuris is NULL THEN RETURN 'Buncombe County'; End IF;
+IF (theJuris <> '') IS NOT true THEN RETURN 'Buncombe County'; End IF; -- if null or empty string
+
+RETURN theJuris;
+END;
+$function$
+;
