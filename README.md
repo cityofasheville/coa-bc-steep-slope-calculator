@@ -15,7 +15,6 @@ Runs as a Lambda function that wraps an Express App using serverless-express.
 
 ## Commands
 - npm start         Run Express server locally
-- npm run runsam    Run 'sam local' for one event in test/sam_event.json
 - npm run deploy    Deploy
 - npm run clean     Remove local temp files
 - npm run destroy   Delete all objects from AWS
