@@ -35,15 +35,9 @@ data "archive_file" "steep_slope_zip" {
   output_path = "function.zip"
 }
 
-#Env vars
-data "external" "env" {
-  program = ["node", "--env-file=../.env", "./get-env.js"]
-}
-
-
 # Lambda Function
 resource "aws_lambda_function" "steep_slope" {
-  description      = "Lambda description" 
+  description      = "steep_slope" 
   function_name    = "steep_slope"
   role             = aws_iam_role.steep_slope-role.arn
   handler          = "lambda.handler"
@@ -63,11 +57,11 @@ resource "aws_lambda_function" "steep_slope" {
     "coa:department"  = "information-technology"
     "coa:owner"       = "jtwilson@ashevillenc.gov"
     "coa:owner-team"  = "dev"
-    Description   = "Lambda description"
+    Description   = "steep_slope"
   }
   environment {
     variables = {
-      "CONNECTSTRING": data.external.env.result.CONNECTSTRING
+      "CONNECTSTRING": var.CONNECTSTRING
     }
   }
 }

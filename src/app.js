@@ -1,6 +1,5 @@
 import express, { json, urlencoded, static as servestatic } from 'express';
 import { join } from 'path';
-import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 import { URL } from 'url';
 import routes from './routes/index.js';
@@ -35,7 +34,6 @@ var corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.use(logger('dev'));
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());

@@ -2,8 +2,8 @@ import pg from 'pg';
 const { Pool } = pg;
 import serverlessExpress from '@vendia/serverless-express';
 import app from './app.js';
-import dotenv from 'dotenv';
-dotenv.config();
+// import dotenv from 'dotenv';
+// dotenv.config();
 
 let serverlessExpressInstance;
 
