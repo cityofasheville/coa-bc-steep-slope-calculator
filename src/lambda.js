@@ -17,5 +17,6 @@ app.set('client', client);
 let serverlessExpressInstance = serverlessExpress({ app });
 
 export async function handler(event, context) {
+  console.log("request: ", event.rawPath);
   return serverlessExpressInstance(event, context);
 }

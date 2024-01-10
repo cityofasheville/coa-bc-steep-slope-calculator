@@ -9,17 +9,14 @@ var router = Router();
 
 /* GET users listing. */
 router.get('/', function (req, res) {
-  console.log("/");
   res.render('api', {});
 });
 
 router.get('/slopebypin', function (req, res) {
-  console.log("/slopebypin");
   res.render('slopebypin');
 });
 
 router.get('/slopebypin/:pin', async function (req, res) {
-  console.log("/slopebypin/:pin");
   var pin = req.params.pin.replace(/-| /g, "");
 
   var pinArray = pin.split(",");
