@@ -14,12 +14,10 @@
   },
   "scripts": {
     "start": "node --env-file=.env src/app.local.js",
-    "clean": "rm -rf deploy/nodejs && rm -rf deploy/function && rm -rf deploy/.terraform && rm -rf deploy/.terraform.lock.hcl && rm -rf deploy/*.zip",
-    "build-layer": "cd deploy && mkdir -p nodejs && cp -R ../package*.json nodejs/ && cd nodejs && npm install --omit=dev",
-    "build-function": "cd deploy && mkdir -p function && cp -R ../src/* ../package*.json function/",
-    "deploy-terraform": "cd deploy && terraform init && terraform apply -auto-approve -var-file=../.env",
-    "deploy": "cd deploy && npm run build-layer && npm run build-function && npm run deploy-terraform",
-    "destroy": "cd deploy && mkdir -p nodejs && mkdir -p function && terraform init && terraform destroy -auto-approve -var-file=../.env"
+    "clean": "rm -rf deploy/build && rm -rf deploy/.terraform && rm -rf deploy/.terraform.lock.hcl",
+    "runterraform": "cd deploy/build && terraform init && terraform apply -auto-approve -var-file=../../.env",
+    "deploy": "cd deploy && node deploy.js && npm install --prefix ./build/nodejs --omit-dev && npm run runterraform",
+    "destroy": "cd deploy/build && terraform init && terraform destroy -auto-approve -var-file=../../.env"
   },
   "repository": {
     "type": "git",

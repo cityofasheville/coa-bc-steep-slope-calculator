@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket = "avl-tfstate-store"
-    key    = "terraform/steep_slope/layer/terraform.tfstate"
+    key    = "terraform/${prog_name}/layer/terraform.tfstate"
     region = "us-east-1"
   }
 }
@@ -36,10 +36,10 @@ data "archive_file" "steep_slope_zip" {
 }
 
 # Lambda Function
-resource "aws_lambda_function" "steep_slope" {
-  description      = "steep_slope" 
-  function_name    = "steep_slope"
-  role             = aws_iam_role.steep_slope-role.arn
+resource "aws_lambda_function" "${prog_name}" {
+  description      = "${prog_name}" 
+  function_name    = "${prog_name}"
+  role             = aws_iam_role.${prog_name}-role.arn
   handler          = "lambda.handler"
   runtime          = "nodejs20.x"
   filename = data.archive_file.steep_slope_zip.output_path
@@ -52,12 +52,12 @@ resource "aws_lambda_function" "steep_slope" {
     security_group_ids = var.security_group_ids
   }
   tags = {
-    Name          = "steep_slope"
-    "coa:application" = "steep_slope"
+    Name          = "${prog_name}"
+    "coa:application" = "${prog_name}"
     "coa:department"  = "information-technology"
     "coa:owner"       = "jtwilson@ashevillenc.gov"
     "coa:owner-team"  = "dev"
-    Description   = "steep_slope"
+    Description   = "${prog_name}"
   }
   environment {
     variables = {
@@ -67,10 +67,10 @@ resource "aws_lambda_function" "steep_slope" {
 }
 
 resource "aws_lambda_function_url" "steep_slope_url" {
-  function_name      = aws_lambda_function.steep_slope.function_name
+  function_name      = aws_lambda_function.${prog_name}.function_name
   authorization_type = "NONE"
 }
 
 output "steep_slope_arn" {
-  value = aws_lambda_function.steep_slope.arn
+  value = aws_lambda_function.${prog_name}.arn
 }
