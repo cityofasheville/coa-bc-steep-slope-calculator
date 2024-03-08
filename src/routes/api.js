@@ -28,7 +28,7 @@ router.get('/slopebypin/:pin', async function (req, res) {
   var pinString = "{" + pinArray.join() + "}";
   var client = res.locals.client; // pass in db client from app.js
   const result = await client.query("select * from public.slopetool_getsloperecfrompins($1::varchar[])", [pinString]);
-  console.log(pinString, " result: ", result.rows[0]);
+  // console.log(pinString, " result: ", result.rows[0]);
   res.json(result.rows[0]);
   // await client.end();
 });
