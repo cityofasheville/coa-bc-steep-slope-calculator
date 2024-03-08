@@ -13,7 +13,7 @@
     "pg": "^8.11.3"
   },
   "scripts": {
-    "start": "node --env-file=.env src/app.local.js",
+    "start": "node --env-file=.env src/local.js",
     "clean": "rm -rf deploy/build && rm -rf deploy/.terraform && rm -rf deploy/.terraform.lock.hcl",
     "runterraform": "cd deploy/build && terraform init && terraform apply -auto-approve -var-file=../../.env",
     "deploy": "cd deploy && node deploy.js && npm install --prefix ./build/nodejs --omit-dev && npm run runterraform",
