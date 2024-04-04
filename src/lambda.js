@@ -1,6 +1,6 @@
 import pg from 'pg';
 const { Pool } = pg;
-import serverlessExpress from '@vendia/serverless-express';
+import serverlessExpress from '@codegenie/serverless-express';
 import app from './app.js';
 
 async function DBConnect() {

@@ -23,6 +23,6 @@ resource "aws_iam_role_policy_attachment" "lambda_vpc_access" {
     policy_arn  = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
 
-output "steep_slope_role_arn" {
+output "${prog_name}_role_arn" {
   value = "${aws_iam_role.${prog_name}-role.arn}"
 }

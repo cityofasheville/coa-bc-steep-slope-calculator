@@ -11,27 +11,27 @@ provider "aws" {
 }
 
 # Zip file for Lambda Layer
-data "archive_file" "steep_slope_layer_zip" {
+data "archive_file" "${prog_name}_layer_zip" {
   type        = "zip"
   source_dir  = "nodejs"
   output_path = "layer.zip"
 }
 
 # Lambda Layer
-resource "aws_lambda_layer_version" "steep_slope_layer" {
+resource "aws_lambda_layer_version" "${prog_name}_layer" {
   filename   = "layer.zip"
-  source_code_hash = data.archive_file.steep_slope_layer_zip.output_base64sha256
-  layer_name = "steep_slope_layer"
+  source_code_hash = data.archive_file.${prog_name}_layer_zip.output_base64sha256
+  layer_name = "${prog_name}_layer"
 }
 
-output "steep_slope_layer_arn" {
-  value = aws_lambda_layer_version.steep_slope_layer.arn
+output "${prog_name}_layer_arn" {
+  value = aws_lambda_layer_version.${prog_name}_layer.arn
 }
 
 # Zip file for Lambda Function
-data "archive_file" "steep_slope_zip" {
+data "archive_file" "${prog_name}_zip" {
   type        = "zip"
-  source_dir  = "function/"
+  source_dir  = "funcdir/"
   output_path = "function.zip"
 }
 
@@ -42,9 +42,9 @@ resource "aws_lambda_function" "${prog_name}" {
   role             = aws_iam_role.${prog_name}-role.arn
   handler          = "lambda.handler"
   runtime          = "nodejs20.x"
-  filename = data.archive_file.steep_slope_zip.output_path
-  source_code_hash = data.archive_file.steep_slope_zip.output_base64sha256
-  layers = [aws_lambda_layer_version.steep_slope_layer.arn]
+  filename = data.archive_file.${prog_name}_zip.output_path
+  source_code_hash = data.archive_file.${prog_name}_zip.output_base64sha256
+  layers = [aws_lambda_layer_version.${prog_name}_layer.arn]
   timeout          = 20
   # memory_size      = 256
   vpc_config {
@@ -66,11 +66,54 @@ resource "aws_lambda_function" "${prog_name}" {
   }
 }
 
-resource "aws_lambda_function_url" "steep_slope_url" {
-  function_name      = aws_lambda_function.${prog_name}.function_name
-  authorization_type = "NONE"
+# resource "aws_lambda_function_url" "${prog_name}_url" {
+#   function_name      = aws_lambda_function.${prog_name}.function_name
+#   authorization_type = "NONE"
+# }
+
+resource "aws_apigatewayv2_api" "${prog_name}" {
+  name          = "${prog_name}"
+  protocol_type = "HTTP"
+  target        = aws_lambda_function.${prog_name}.arn
+  tags = {
+    Name          = "${prog_name}"
+    "coa:application" = "${prog_name}"
+    "coa:department"  = "information-technology"
+    "coa:owner"       = "jtwilson@ashevillenc.gov"
+    "coa:owner-team"  = "dev"
+  }
 }
 
-output "steep_slope_arn" {
+resource "aws_apigatewayv2_domain_name" "domain-name-${prog_name}" {
+  domain_name = var.domain_name
+  domain_name_configuration {
+    certificate_arn = var.certificate_arn
+    endpoint_type   = "REGIONAL"
+    security_policy = "TLS_1_2"
+  }
+}
+
+resource "aws_apigatewayv2_api_mapping" "apigw-map-${prog_name}" {
+  api_id      = aws_apigatewayv2_api.${prog_name}.id
+  domain_name = var.domain_name
+  stage       = "$default"
+}
+
+resource "aws_lambda_permission" "apigw-${prog_name}" {
+  action        = "lambda:InvokeFunction"
+	function_name = aws_lambda_function.${prog_name}.function_name
+	principal     = "apigateway.amazonaws.com"
+	source_arn = "${aws_apigatewayv2_api.${prog_name}.execution_arn}/*/*"
+}
+
+output "${prog_name}_arn" {
   value = aws_lambda_function.${prog_name}.arn
+}
+
+output "${prog_name}_api_url" {
+  value = aws_apigatewayv2_domain_name.domain-name-${prog_name}.domain_name
+}
+
+output "${prog_name}_api_id" {
+  value = aws_apigatewayv2_api.${prog_name}.id
 }

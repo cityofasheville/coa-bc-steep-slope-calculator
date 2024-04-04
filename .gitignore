@@ -7,13 +7,5 @@ node_modules
 # environment variables
 .env
 
-#terraform
-.terraform*
-
-# zip
-*.zip
-
-# deploy dirs
-function/
-nodejs/
-
+# deploy directory
+build/
