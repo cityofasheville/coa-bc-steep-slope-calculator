@@ -1,0 +1,36 @@
+# Required Fields
+
+lambda_names:
+  production_name: template      # Name of the production lambda
+  development_name: template-dev # Name of the development lambda
+region: us-east-1                # AWS region
+state_bucket: avl-tfstate-store  # S3 bucket to store terraform state
+nodejs_or_python: nodejs         # set to nodejs or python
+lambda_options:                  # Enable access to AWS features. Must be 'true' or 'false'
+  vpc: 'true'
+  api_gateway: 'true'
+  lambda_url: 'false'
+  secrets_manager: 'false'
+  invoke_lambda: 'false'
+  s3: 'false'
+  ses: 'false'
+sam_deploy: 'false'              # Only required if nodejs_or_python = python. 
+owner_tag: xxx@ashevilenc.gov    # Most tags are hardcoded, but change the coa:owner tag here
+
+# Optional Fields
+
+# If VPC is true, then these VPC settings are used
+vpc_settings:
+  subnet_ids:
+    - subnet-xxx
+    - subnet-xxx
+  security_group_ids:
+    - sg-xx
+
+# If API Gateway is true, then these API Gateway settings are used
+api_gateway_settings:
+  production_domain_name: template.ashevillenc.gov
+  development_domain_name: dev-template.ashevillenc.gov
+  certificate_arn: arn:aws:acm:us-east-1:xx:certificate/xxx
+
+

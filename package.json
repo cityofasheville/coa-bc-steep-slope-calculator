@@ -14,10 +14,9 @@
   },
   "scripts": {
     "start": "node --env-file=.env src/local.js",
-    "clean": "rm -rf deploy/build && rm -rf deploy/.terraform && rm -rf deploy/.terraform.lock.hcl",
-    "runterraform": "cd deploy/build && terraform init && terraform apply -auto-approve -var-file=../../.env",
-    "deploy": "cd deploy && node deploy.js && npm install --prefix ./build/nodejs --omit-dev && npm run runterraform",
-    "destroy": "cd deploy/build && terraform init && terraform destroy -auto-approve -var-file=../../.env"
+    "clean": "rm -rf deploy/build",
+    "deploy": "cd deploy && node deploy.js",
+    "destroy": "cd deploy && node destroy.js"
   },
   "repository": {
     "type": "git",
@@ -29,5 +28,8 @@
   "bugs": {
     "url": "https://github.com/cityofasheville/coa-bc-steep-slope-calculator/issues"
   },
-  "homepage": "https://github.com/cityofasheville/coa-bc-steep-slope-calculator#readme"
+  "homepage": "https://github.com/cityofasheville/coa-bc-steep-slope-calculator#readme",
+  "devDependencies": {
+    "yaml": "^2.4.2"
+  }
 }

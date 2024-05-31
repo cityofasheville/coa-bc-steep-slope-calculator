@@ -13,11 +13,20 @@ At runtime, the application checks if a matching geometry exist in the sloperesu
 
 Runs as a Lambda function that wraps an Express App using serverless-express.
 
-## Commands
-- npm start         Run Express server locally
-- npm run deploy    Deploy
-- npm run clean     Remove local temp files
-- npm run destroy   Delete all objects from AWS
+### Usage
+First run ```npm install```
+
+```package.json``` has these scripts:
+- Test Locally: 
+  - ```npm start``` (or for a Python program: ```npm run startpy```)
+- Deploy: 
+  - ```npm run deploy prod```
+  - ```npm run deploy dev```
+- Destroy: (removes all objects from AWS)
+  - ```npm run destroy prod```
+  - ```npm run destroy dev``` 
+- Clean: 
+  - ```npm run clean``` (removes local temp files)
 
 
     

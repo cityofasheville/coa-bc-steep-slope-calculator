@@ -6,6 +6,7 @@ node_modules
 
 # environment variables
 .env
+deploy.yaml
 
 # Local sensitive files
 *NOGITHUB*
