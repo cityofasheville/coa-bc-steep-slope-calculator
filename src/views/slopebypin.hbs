@@ -19,26 +19,28 @@
           </thead>
           <tbody>
             <tr>
-              <td>pin</td>
-              <td><form id='testSlopePinForm'><input
-                    {{! id='testSlopePin' }}
-                    name='pinInput'
-                    type='text'
-                    class='form-control'
-                    placeholder='pin or pins'
-                  /></form></td>
+              <td><label for='pinInput'>pin</label></td>
+              <td>
+                <input
+                  id='pinInput'
+                  name='pinInput'
+                  type='text'
+                  class='form-control'
+                  placeholder='pin or pins'
+                />
+              </td>
               <td>PIN</td>
             </tr>
           </tbody>
         </table>
         <div class='d-flex justify-content-end'>
-          <button id='testSlopeByPinApi' class='btn btn-primary'>Test</button>
+          <button id='testSlopeByPinApi' type='submit' class='btn btn-primary'>Test</button>
         </div>
       </form>
     </div>
 
     <hr />
-    <h4>Sample 200 Response:</h4>
+    <h2 id='resultsHeading' class='h4'>Sample 200 Response:</h2>
 
     {{! prettier-ignore }}
     <pre id='resultsDiv' class='p-3 bg-light border rounded' style="min-height: 150px;">

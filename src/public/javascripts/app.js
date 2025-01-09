@@ -53,7 +53,18 @@ document.addEventListener('DOMContentLoaded', function () {
   form.addEventListener('submit', async function (event) {
     event.preventDefault();
     const pinInput = event.target.pinInput.value;
+    let pinOk = true;
     try {
+      if (!document.getElementById('resultsHeading')) {
+        const newResultsHeading = document.createElement('h2');
+        newResultsHeading.classList.add('h4');
+        newResultsHeading.id = 'resultsHeading';
+        const parentElement = document.getElementById('resultsParent');
+        parentElement.appendChild(newResultsHeading);
+      }
+
+      let resultsHeading = document.getElementById('resultsHeading');
+
       if (!document.getElementById('resultsDiv')) {
         const newResultsDiv = document.createElement('div');
         newResultsDiv.classList.add('p-3', 'bg-light', 'border', 'rounded');
@@ -64,20 +75,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
       let resultsDiv = document.getElementById('resultsDiv');
 
-      if (pinInput.length !== 10 && pinInput.length !== 15) {
-        resultsDiv.innerHTML = 'PIN must be 10 or 15 digits.';
+      pinInput.split(',').forEach((pin) => {
+        if ((pin.trim().length !== 10 && pin.trim().length !== 15) || pin.trim().length === 0) {
+          resultsDiv.innerHTML = 'All PINs must be 10 or 15 digits.';
+          pinOk = false;
+        } else if (pin.trim().length === 10) {
+          if (pin.trim().match(/[^0-9]/)) {
+            resultsDiv.innerHTML = 'All 10-digit PINs must be numeric.';
+            pinOk = false;
+          }
+        } else if (pin.trim().length === 15) {
+          if (pin.trim().match(/[^0-9-]/)) {
+            resultsDiv.innerHTML = 'All 15-digit PINs must only include numbers or dashes.';
+            pinOk = false;
+          }
+        }
+      });
+
+      if (!pinOk) {
         return;
-      } else if (pinInput.length === 10) {
-        if (pinInput.match(/[^0-9]/)) {
-          resultsDiv.innerHTML = 'PIN must be all numbers.';
-          return;
-        }
-      } else if (pinInput.length === 15) {
-        if (pinInput.match(/[^0-9-]/)) {
-          resultsDiv.innerHTML = 'PIN must be all numbers or numbers and dashes.';
-          return;
-        }
       }
+
       resultsDiv.innerHTML = spinnerMarkup;
 
       let response = await fetch(`/api/slopebypin/${pinInput}`);
@@ -97,7 +115,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       }
 
-      document.getElementById('resultsDiv').innerHTML = resultContent;
+      resultsDiv.innerHTML = resultContent;
+      resultsHeading.innerHTML = 'Your results:';
     } catch (error) {
       console.error('error', error);
       document.getElementById(
