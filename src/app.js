@@ -18,11 +18,10 @@ var allowList = [
   'http://simplicity.ashevillenc.gov',
   'https://dev-simplicity.ashevillenc.gov',
   'http://dev-simplicity.ashevillenc.gov',
+  'https://development.d1thp43hcib1lz.amplifyapp.com',
   'https://steep-slope-dev.ashevillenc.gov',
   'https://localhost:3000',
   'http://localhost:3000',
-  'https://climatej.d1thp43hcib1lz.amplifyapp.com',
-  'https://steep-slope-dev.ashevillenc.gov/',
 ];
 var corsOptions = {
   origin: function (origin, callback) {
