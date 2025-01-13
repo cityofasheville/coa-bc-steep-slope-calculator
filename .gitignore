@@ -5,7 +5,7 @@ node_modules
 .DS_Store
 
 # environment variables
-.env
+*.env
 deploy.yaml
 
 # Local sensitive files
