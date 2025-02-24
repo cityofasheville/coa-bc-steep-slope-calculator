@@ -1,1 +1,0 @@
-This is a simple test of using the graphql-request module to get pinnums from the SimpliCity API
