@@ -14,7 +14,7 @@
   },
   "scripts": {
     "start": "node --env-file=.env src/local.js",
-    "clean": "rm -rf deploy/build",
+    "clean": "rm -rf deploy/build && rm -rf node_modules/",
     "deploy": "cd deploy && node deploy.js",
     "destroy": "cd deploy && node destroy.js"
   },
