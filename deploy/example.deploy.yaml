@@ -1,14 +1,13 @@
 # Required Fields
 
-lambda_names:
-  production_name: template      # Name of the production lambda
-  development_name: template-dev # Name of the development lambda
+lambda_name: template           # Name of the production lambda. GitHub branch name will be added as a suffix for dev and feature branches
+description: 'Description for Lambda function'
 region: us-east-1                # AWS region
 state_bucket: avl-tfstate-store  # S3 bucket to store terraform state
 nodejs_or_python: nodejs         # set to nodejs or python
 lambda_options:                  # Enable access to AWS features. Must be 'true' or 'false'
-  vpc: 'true'
-  api_gateway: 'true'
+  vpc: 'false'
+  api_gateway: 'false'
   lambda_url: 'false'
   secrets_manager: 'false'
   invoke_lambda: 'false'
@@ -28,9 +27,9 @@ vpc_settings:
     - sg-xx
 
 # If API Gateway is true, then these API Gateway settings are used
+# If the domain/cert for prod and dev is the same, omit the dev domain/cert
 api_gateway_settings:
-  production_domain_name: template.ashevillenc.gov
-  development_domain_name: dev-template.ashevillenc.gov
-  certificate_arn: arn:aws:acm:us-east-1:xx:certificate/xxx
-
-
+  production_domain_name: example.com
+  development_domain_name: template.ashevillenc.gov # No need to include "dev" in the name. GitHub branch name will be added as a prefix for dev and feature branches
+  production_certificate_arn: arn:aws:acm:us-east-1:xx:certificate/xxx
+  development_certificate_arn: arn:aws:acm:us-east-1:xx:certificate/xyz
