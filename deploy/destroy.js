@@ -4,22 +4,18 @@ import { execSync } from 'child_process';
 
 try {
   // Running dev or prod?
-  if (process.argv.length === 2) {
-    console.error('Usage: npm run destroy prod|dev');
-    process.exit(1);
-  }
-  let args = process.argv.slice(2);
-  let deployType = args[0];
+  const gitBranch = execSync('git branch --show-current').toString().trim();
+  
+  let deployType = gitBranch;
 
   let buildDir = 'build/';
 
-  if (deployType === 'prod') {
-    buildDir += deployType;
-  } else if (deployType === 'dev') {
-    buildDir += deployType;
+  if (deployType === 'production' || deployType === 'main') {
+    buildDir += 'prod';
+  } else if (deployType === 'development') {
+    buildDir += 'dev';
   } else {
-    console.error('Usage: npm run destroy prod|dev');
-    process.exit(1);
+    buildDir += deployType
   }
 
   execSync(`cd ${buildDir} && terraform init && terraform destroy -auto-approve`, { stdio: 'inherit' });

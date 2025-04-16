@@ -23,7 +23,7 @@ resource "aws_apigatewayv2_api" "${config.prog_name}" {
 resource "aws_apigatewayv2_domain_name" "domain-name-${config.prog_name}" {
   domain_name = "${config.domain_name}"
   domain_name_configuration {
-    certificate_arn = "${config.api_gateway_settings.certificate_arn}"
+    certificate_arn = "${config.certificate_arn}"
     endpoint_type   = "REGIONAL"
     security_policy = "TLS_1_2"
   }
