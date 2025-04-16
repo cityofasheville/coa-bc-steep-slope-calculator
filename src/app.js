@@ -20,6 +20,7 @@ var allowList = [
   'http://dev-simplicity.ashevillenc.gov',
   'https://development.d1thp43hcib1lz.amplifyapp.com',
   'https://steep-slope-dev.ashevillenc.gov',
+  'https://dev-steep-slope.ashevillenc.gov',
   'https://localhost:3000',
   'http://localhost:3000',
 ];
