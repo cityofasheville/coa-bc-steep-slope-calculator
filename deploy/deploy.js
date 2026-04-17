@@ -16,7 +16,7 @@ try {
   const file = await fs.readFile(`${__deploy_dir}/deploy.yaml`, 'utf8');
   let config = YAML.parse(file);
   config.deploy_dir = __deploy_dir;
-  const gitBranch = execSync('git branch --show-current').toString().trim();
+  const gitBranch = execSync('git branch --show-current').toString().trim().split('/').pop();
 
   // get Lambda environment variables from .env file
   try {
@@ -107,7 +107,7 @@ async function setUpFiles(config) {
     await BuildPython(build_dir, config.sam_deploy);
   }
 ///////////////////////////////////
- execSync(`cd ${build_dir} && terraform init && terraform apply -auto-approve`, { stdio: 'inherit' });
+ execSync(`cd ${build_dir} && terraform init && terraform apply`, { stdio: 'inherit' });
 ///////////////////////////////////
 }
 
@@ -130,5 +130,5 @@ async function BuildNodeJS(build_dir) {
   await fs.copyFile('../package.json', `${build_dir}/nodejs/package.json`);
   await fs.copyFile('../package-lock.json', `${build_dir}/nodejs/package-lock.json`);
 
-  execSync(`npm install --prefix ${build_dir}/nodejs --omit-dev`, { stdio: 'inherit' });
+  execSync(`npm install --prefix ${build_dir}/nodejs --omit=dev`, { stdio: 'inherit' });
 }
